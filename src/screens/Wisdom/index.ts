@@ -1,0 +1,1 @@
+export { Wisdom } from "./Wisdom";
