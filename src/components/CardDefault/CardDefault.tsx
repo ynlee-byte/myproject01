@@ -30,9 +30,9 @@ export const CardDefault = ({
       <div
         className={`flex flex-col w-full items-start gap-6 sm:gap-8 lg:gap-[34px] relative flex-[0_0_auto] ${frameClassName}`}
       >
-        <div className="relative w-[80px] sm:w-[90px] lg:w-[100px] h-[80px] sm:h-[90px] lg:h-[100px] bg-[#3b4236] rounded-full overflow-hidden shadow-shadow-1">
+        <div className="relative w-[80px] sm:w-[90px] lg:w-[100px] h-[80px] sm:h-[90px] lg:h-[100px] bg-[#3b4236] rounded-full overflow-hidden shadow-shadow-1 flex items-center justify-center">
           <img
-            className={`absolute top-3 sm:top-4 lg:top-[18px] left-2 sm:left-3 lg:left-3 w-[60px] sm:w-[70px] lg:w-[75px] h-[60px] sm:h-[70px] lg:h-[75px] object-cover ${crownPerspectiveClassName}`}
+            className={`w-[60px] sm:w-[70px] lg:w-[75px] h-[60px] sm:h-[70px] lg:h-[75px] object-contain ${crownPerspectiveClassName}`}
             alt="Crown perspective"
             src={crownPerspective}
           />
@@ -40,7 +40,7 @@ export const CardDefault = ({
 
         <div className="flex flex-col items-start gap-3 sm:gap-4 lg:gap-[15px] relative self-stretch w-full flex-[0_0_auto]">
           <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
-            <div className="inline-flex items-center justify-center gap-2 relative flex-[0_0_auto]">
+            <div className="inline-flex items-center justify-start gap-2 relative flex-[0_0_auto]">
               <div className="mt-[-1.00px] font-CP-h1 font-[number:var(--CP-h1-font-weight)] text-cpwhite text-[20px] sm:text-[24px] lg:text-[length:var(--CP-h1-font-size)] tracking-[var(--CP-h1-letter-spacing)] leading-[var(--CP-h1-line-height)] relative w-fit whitespace-nowrap [font-style:var(--CP-h1-font-style)]">
                 {text}
               </div>
@@ -55,7 +55,7 @@ export const CardDefault = ({
             </div>
           </div>
 
-          <p className="relative self-stretch font-CP-body2 font-[number:var(--CP-body2-font-weight)] text-body-text-color text-[14px] sm:text-[16px] lg:text-[length:var(--CP-body2-font-size)] tracking-[var(--CP-body2-letter-spacing)] leading-[var(--CP-body2-line-height)] [font-style:var(--CP-body2-font-style)]">
+          <p className="relative self-stretch font-CP-body2 font-[number:var(--CP-body2-font-weight)] text-body-text-color text-[14px] sm:text-[16px] lg:text-[length:var(--CP-body2-font-size)] tracking-[var(--CP-body2-letter-spacing)] leading-[var(--CP-body2-line-height)] [font-style:var(--CP-body2-font-style)] text-left">
             <span className="tracking-[var(--CP-body2-letter-spacing)] font-CP-body2 [font-style:var(--CP-body2-font-style)] font-[number:var(--CP-body2-font-weight)] leading-[var(--CP-body2-line-height)] text-[14px] sm:text-[16px] lg:text-[length:var(--CP-body2-font-size)]">
               {text3}
             </span>

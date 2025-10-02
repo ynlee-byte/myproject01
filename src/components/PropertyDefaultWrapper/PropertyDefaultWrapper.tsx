@@ -24,7 +24,7 @@ export const PropertyDefaultWrapper = ({
       </div>
 
       <img
-        className="absolute w-3 sm:w-4 h-3 sm:h-4 -top-2 sm:-top-3 left-1/2 transform -translate-x-1/2"
+        className="absolute w-3 sm:w-4 h-3 sm:h-4 -top-2 sm:-top-3 left-[25px] sm:left-[30px] md:left-[32.5px] lg:left-[35px]"
         alt="Polygon"
         src={polygon}
       />

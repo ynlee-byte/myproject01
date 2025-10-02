@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ButtonLarge } from "../../../../components/ButtonLarge";
 import { CardLarge } from "../../../../components/CardLarge";
-import playButtonImage from "../../../../img/auruminc_a_bold_minimalist_logo_of_Noahs_Ark_large_curved_hul_6ac342d2-6dc2-46cf-b840-a97fa38d2fcf_3.png";
 
 export const Frame = (): JSX.Element => {
   // 목표 시간 설정 (예: 2일 39시간 44초 후)
@@ -106,17 +105,19 @@ export const Frame = (): JSX.Element => {
     scrollContainerRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  // 마우스 휠 가로 스크롤 핸들러 - 카드 3개씩 이동
+  // 마우스 휠 가로 스크롤 핸들러
   const handleWheel = (e: React.WheelEvent) => {
     if (!scrollContainerRef.current) return;
     
-    // 화면 크기에 따른 카드 너비 계산
+    // 페이지 스크롤 차단
+    e.preventDefault();
+    e.stopPropagation();
+
     const cardWidth = window.innerWidth >= 1024 ? 470 : window.innerWidth >= 640 ? 400 : 300;
     const gap = 15;
     const cardsToScroll = 3; // 한 번에 이동할 카드 수
     const scrollAmount = (cardWidth + gap) * cardsToScroll;
     
-    // 스크롤 방향에 따라 이동
     if (e.deltaY > 0) {
       // 아래로 스크롤 - 오른쪽으로 이동
       scrollContainerRef.current.scrollBy({
@@ -132,44 +133,33 @@ export const Frame = (): JSX.Element => {
     }
   };
 
-  // 실시간 순위 섹션에서만 페이지 스크롤 차단
+  // 비수동 wheel 리스너로 메인 페이지 스크롤 차단 + 가로 스크롤 처리
   useEffect(() => {
-    const rankingSection = document.querySelector('[data-ranking-section]');
-    
-    const handleWheelEvent = (e: WheelEvent) => {
-      // 페이지 스크롤 차단
+    const el = scrollContainerRef.current;
+    if (!el) return;
+
+    const onWheelNonPassive = (e: WheelEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      
-      if (!scrollContainerRef.current) return;
-      
-      // 화면 크기에 따른 카드 너비 계산
+
       const cardWidth = window.innerWidth >= 1024 ? 470 : window.innerWidth >= 640 ? 400 : 300;
       const gap = 15;
       const cardsToScroll = 3;
       const scrollAmount = (cardWidth + gap) * cardsToScroll;
-      
-      // 스크롤 방향에 따라 이동
-      if (e.deltaY > 0) {
-        scrollContainerRef.current.scrollBy({
-          left: scrollAmount,
-          behavior: 'smooth'
-        });
-      } else {
-        scrollContainerRef.current.scrollBy({
-          left: -scrollAmount,
-          behavior: 'smooth'
-        });
-      }
+
+      // 트랙패드의 가로 스크롤(deltaX)도 고려
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+
+      el.scrollBy({
+        left: delta > 0 ? scrollAmount : -scrollAmount,
+        behavior: 'smooth'
+      });
     };
 
-    if (rankingSection) {
-      rankingSection.addEventListener('wheel', handleWheelEvent, { passive: false });
-      
-      return () => {
-        rankingSection.removeEventListener('wheel', handleWheelEvent);
-      };
-    }
+    el.addEventListener('wheel', onWheelNonPassive, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheelNonPassive);
+    };
   }, []);
 
   return (
@@ -177,12 +167,12 @@ export const Frame = (): JSX.Element => {
       <div className="flex flex-col items-center justify-center gap-8 sm:gap-12 lg:gap-[61px] relative self-stretch w-full flex-[0_0_auto]">
         <div className="flex flex-col items-center gap-6 sm:gap-8 lg:gap-[50px] relative self-stretch w-full flex-[0_0_auto]">
           <div className="flex flex-col items-center gap-4 sm:gap-5 relative self-stretch w-full flex-[0_0_auto] px-4">
-            <div className="flex flex-col items-center relative self-stretch w-full flex-[0_0_auto]">
-              <div className="relative self-stretch mt-[-1.00px] font-CP-h3 font-[number:var(--CP-h3-font-weight)] text-variable-collection-CP-CPC text-[32px] sm:text-[48px] lg:text-[length:var(--CP-h3-font-size)] text-center tracking-[var(--CP-h3-letter-spacing)] leading-[var(--CP-h3-line-height)] [font-style:var(--CP-h3-font-style)]">
+            <div className="flex flex-col items-center gap-1 sm:gap-2 relative self-stretch w-full flex-[0_0_auto] pt-[50px]">
+              <div className="relative self-stretch mt-[-1.00px] font-CP-h3 font-[number:var(--CP-h3-font-weight)] text-variable-collection-CP-CPC text-[32px] sm:text-[48px] lg:text-[length:var(--CP-h3-font-size)] text-center tracking-[var(--CP-h3-letter-spacing)] leading-[1.0] [font-style:var(--CP-h3-font-style)]">
                 1단계
               </div>
 
-              <div className="relative self-stretch font-CP-h3 font-[number:var(--CP-h3-font-weight)] text-cpwhite text-[32px] sm:text-[48px] lg:text-[length:var(--CP-h3-font-size)] text-center tracking-[var(--CP-h3-letter-spacing)] leading-[var(--CP-h3-line-height)] [font-style:var(--CP-h3-font-style)]">
+              <div className="relative self-stretch font-CP-h3 font-[number:var(--CP-h3-font-weight)] text-cpwhite text-[32px] sm:text-[48px] lg:text-[length:var(--CP-h3-font-size)] text-center tracking-[var(--CP-h3-letter-spacing)] leading-[1.0] [font-style:var(--CP-h3-font-style)]">
                 위즈덤 카드 작성하기
               </div>
             </div>
@@ -247,23 +237,33 @@ export const Frame = (): JSX.Element => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-[20px] px-4 sm:px-8 lg:px-[240px] py-0 relative self-stretch w-full flex-[0_0_auto]">
-          <div className="flex-shrink-0 flex min-w-0 w-full lg:w-[931px] min-h-[40vh] sm:min-h-[35vh] md:min-h-[30vh] lg:min-h-[25vh] xl:min-h-[180px] items-center justify-center gap-2.5 px-[2vw] sm:px-[3vw] md:px-[4vw] lg:px-8 py-[4vh] sm:py-[5vh] md:py-[6vh] lg:py-[100px] relative border border-solid border-[#ffffff26] aspect-video bg-[url(https://c.animaapp.com/K3FjWwF5/img/frame-2121457743.png)] bg-cover bg-[50%_50%]">
+        <div className="flex flex-col lg:flex-row items-start justify-center gap-4 lg:gap-[20px] px-4 sm:px-8 lg:px-[240px] py-0 relative self-stretch w-full flex-[0_0_auto]">
+          <div className="flex min-w-0 w-full lg:w-auto lg:flex-1 min-h-[40vh] sm:min-h-[35vh] md:min-h-[30vh] lg:min-h-[25vh] xl:min-h-[180px] items-center justify-center gap-2.5 px-[2vw] sm:px-[3vw] md:px-[4vw] lg:px-8 py-[4vh] sm:py-[5vh] md:py-[6vh] lg:py-[100px] relative border border-solid border-[#ffffff26] aspect-video bg-[url(https://c.animaapp.com/K3FjWwF5/img/frame-2121457743.png)] bg-cover bg-[50%_50%]">
             <button 
               onClick={openVideoModal}
-              aria-label="동영상 재생"
-              className="relative w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] md:w-[110px] md:h-[110px] lg:w-[120px] lg:h-[120px] rounded-full overflow-hidden p-0 bg-transparent border-0 outline-none cursor-pointer transition-transform duration-200 ease-in-out hover:scale-105 active:scale-95"
+              className="relative w-[80px] sm:w-[100px] md:w-[110px] lg:w-[120px] h-[80px] sm:h-[100px] md:h-[110px] lg:h-[120px] aspect-square cursor-pointer group bg-transparent border-0 outline-none appearance-none focus:outline-none"
             >
-              <img
-                src={playButtonImage}
-                alt="재생"
-                className="w-full h-full object-contain pointer-events-none"
-                loading="lazy"
-              />
+              {/* 어두운 원형 배경 with 내부 녹색 테두리 */}
+              <div 
+                className="absolute inset-0 rounded-full bg-[#2a2a2a] bg-opacity-90 flex items-center justify-center transition-all duration-300 ease-in-out pulse-target" 
+                style={{ boxShadow: 'inset 0 0 0 1px #adff00' }}
+              >
+                {/* 플레이 아이콘 (SVG로 안정적 렌더링) */}
+                <svg
+                  className="w-[26px] sm:w-[32px] md:w-[36px] lg:w-[40px] h-[26px] sm:h-[32px] md:h-[36px] lg:h-[40px] text-[#adff00] transition-transform duration-300 ease-in-out"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <polygon points="8,5 20,12 8,19" fill="currentColor" />
+                </svg>
+              </div>
+              
+              {/* 호버 시 외부 글로우 효과 */}
+              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-30 transition-opacity duration-300 ease-in-out" style={{ boxShadow: '0 0 20px #adff00' }}></div>
             </button>
           </div>
 
-          <div className="flex flex-col min-w-0 w-full lg:max-w-[490px] items-start relative">
+          <div className="flex flex-col min-w-0 w-full lg:max-w-[490px] items-start relative flex-1">
             <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full mb-4">
               <div className="relative self-stretch mt-[-1.00px] font-CP-h2 font-[number:var(--CP-h2-font-weight)] text-cpwhite text-[24px] sm:text-[32px] lg:text-[length:var(--CP-h2-font-size)] tracking-[var(--CP-h2-letter-spacing)] leading-[var(--CP-h2-line-height)] [font-style:var(--CP-h2-font-style)]">
                 이색 미니 보험의 등장
@@ -307,12 +307,12 @@ export const Frame = (): JSX.Element => {
         </div>
 
         <div 
-          className="relative w-full lg:px-[240px]"
+          className="relative w-full"
           data-ranking-section
         >
           <div 
             ref={scrollContainerRef}
-            className="flex gap-[15px] overflow-x-auto pb-4 px-4 scrollbar-hide cursor-grab active:cursor-grabbing"
+            className="flex gap-[15px] overflow-x-auto pb-4 px-4 scrollbar-hide cursor-grab active:cursor-grabbing overscroll-x-contain overscroll-y-none"
             style={{ 
               scrollbarWidth: 'none',
               msOverflowStyle: 'none'
@@ -323,13 +323,91 @@ export const Frame = (): JSX.Element => {
             onMouseMove={handleMouseMove}
           >
             {Array.from({ length: 11 }, (_, index) => (
-              <div key={index} className="flex-shrink-0">
+              <div key={index} className="relative flex-shrink-0">
+                {/* 1등 배지 - 첫 번째 카드에만 표시, 카드에 붙어서 함께 스크롤 */}
+                {index === 0 && (
+                  <div className="absolute top-5 left-5 w-[60px] sm:w-[70px] lg:w-[73px] h-[70px] sm:h-[80px] lg:h-[88px] pointer-events-none z-10">
+                    <img
+                      className="absolute top-[35px] sm:top-[40px] lg:top-[45px] left-[7px] sm:left-[8px] lg:left-[9px] w-5 sm:w-6 lg:w-7 h-[30px] sm:h-[35px] lg:h-[43px]"
+                      alt="Rectangle"
+                      src="https://c.animaapp.com/K3FjWwF5/img/rectangle-34625610.svg"
+                    />
+                    <img
+                      className="absolute top-[35px] sm:top-[40px] lg:top-[45px] left-[25px] sm:left-[28px] lg:left-[33px] w-5 sm:w-6 lg:w-7 h-[30px] sm:h-[35px] lg:h-[43px]"
+                      alt="Rectangle"
+                      src="https://c.animaapp.com/K3FjWwF5/img/rectangle-34625611.svg"
+                    />
+                    <img
+                      className="absolute top-0 left-0 w-[55px] sm:w-[65px] lg:w-[71px] h-[55px] sm:h-[65px] lg:h-[71px]"
+                      alt="Star"
+                      src="https://c.animaapp.com/K3FjWwF5/img/star-21.svg"
+                    />
+                    <div className="absolute top-[10px] sm:top-[12px] lg:top-[13px] left-[10px] sm:left-[12px] lg:left-[13px] w-[35px] sm:w-[40px] lg:w-[45px] h-[35px] sm:h-[40px] lg:h-[45px] bg-[#f0b04a] rounded-full flex items-center justify-center">
+                      <span className="[font-family:'Pretendard-SemiBold',Helvetica] font-semibold text-white text-[24px] sm:text-[30px] lg:text-[35px] leading-none">
+                        1
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* 2등 배지 - 두 번째 카드에만 표시, 카드에 붙어서 함께 스크롤 */}
+                {index === 1 && (
+                  <div className="absolute top-5 left-5 w-[60px] sm:w-[70px] lg:w-[73px] h-[70px] sm:h-[80px] lg:h-[88px] pointer-events-none z-10">
+                    {/* 스파이크 외곽 (#E5E5E5) - star SVG를 마스크로 채움 */}
+                    <div
+                      className="absolute top-0 left-0 w-[55px] sm:w-[65px] lg:w-[71px] h-[55px] sm:h-[65px] lg:h-[71px]"
+                      style={{
+                        WebkitMaskImage: 'url(https://c.animaapp.com/K3FjWwF5/img/star-21.svg)',
+                        maskImage: 'url(https://c.animaapp.com/K3FjWwF5/img/star-21.svg)',
+                        WebkitMaskRepeat: 'no-repeat',
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskSize: 'contain',
+                        maskSize: 'contain',
+                        backgroundColor: '#E5E5E5'
+                      }}
+                    />
+                    {/* 중앙 원형(실버톤) + 숫자 중앙 정렬 */}
+                    <div className="absolute top-[10px] sm:top-[12px] lg:top-[13px] left-[10px] sm:left-[12px] lg:left-[13px] w-[35px] sm:w-[40px] lg:w-[45px] h-[35px] sm:h-[40px] lg:h-[45px] bg-[#c9c9c9] rounded-full flex items-center justify-center">
+                      <span className="[font-family:'Pretendard-SemiBold',Helvetica] font-semibold text-white text-[24px] sm:text-[30px] lg:text-[35px] leading-none">
+                        2
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* 3등 배지 - 세 번째 카드에만 표시 (동메달) */}
+                {index === 2 && (
+                  <div className="absolute top-5 left-5 w-[60px] sm:w-[70px] lg:w-[73px] h-[70px] sm:h-[80px] lg:h-[88px] pointer-events-none z-10">
+                    {/* 스파이크 외곽(브론즈 테두리) */}
+                    <div
+                      className="absolute top-0 left-0 w-[55px] sm:w-[65px] lg:w-[71px] h-[55px] sm:h-[65px] lg:h-[71px]"
+                      style={{
+                        WebkitMaskImage: 'url(https://c.animaapp.com/K3FjWwF5/img/star-21.svg)',
+                        maskImage: 'url(https://c.animaapp.com/K3FjWwF5/img/star-21.svg)',
+                        WebkitMaskRepeat: 'no-repeat',
+                        maskRepeat: 'no-repeat',
+                        WebkitMaskSize: 'contain',
+                        maskSize: 'contain',
+                        backgroundColor: '#BC7346'
+                      }}
+                    />
+                    {/* 중앙 원형(브론즈) + 숫자 중앙 정렬 */}
+                    <div
+                      className="absolute top-[10px] sm:top-[12px] lg:top-[13px] left-[10px] sm:left-[12px] lg:left-[13px] w-[35px] sm:w-[40px] lg:w-[45px] h-[35px] sm:h-[40px] lg:h-[45px] rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: '#D07A35', boxShadow: 'inset 0 0 0 2px rgba(255,255,255,0.15)' }}
+                    >
+                      <span className="[font-family:'Pretendard-SemiBold',Helvetica] font-semibold text-white text-[24px] sm:text-[30px] lg:text-[35px] leading-none">
+                        3
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 <CardLarge
                   className="!left-[unset] !top-[unset] !min-w-[300px] !w-[300px] sm:!min-w-[400px] sm:!w-[400px] lg:!min-w-[470px] lg:!w-[470px]"
                   crownPerspective="https://c.animaapp.com/K3FjWwF5/img/crown-perspective-matte-13@2x.png"
-                  divClassName="bg-[url(https://c.animaapp.com/K3FjWwF5/img/frame-2121457849-11@2x.png)]"
                   firePerspective="https://c.animaapp.com/K3FjWwF5/img/fire-perspective-matte-12@2x.png"
-                  frameClassName={`bg-[url(https://c.animaapp.com/K3FjWwF5/img/frame-2121457846-${index + 1}@2x.png)]`}
+                  headerBgUrl={`https://c.animaapp.com/K3FjWwF5/img/frame-2121457846-${index + 1}@2x.png`}
                   frameClassNameOverride="!self-stretch !w-full"
                   likePerspective="https://c.animaapp.com/K3FjWwF5/img/like-perspective-matte-12@2x.png"
                   starPerspective="https://c.animaapp.com/K3FjWwF5/img/star-perspective-matte-12@2x.png"
@@ -351,39 +429,13 @@ export const Frame = (): JSX.Element => {
             ))}
           </div>
 
-          {/* Ranking badges - positioned absolutely */}
-          <div className="absolute top-[25px] left-8 sm:left-12 lg:left-16 w-[60px] sm:w-[70px] lg:w-[73px] h-[70px] sm:h-[80px] lg:h-[88px] shadow-[0px_4px_10px_#0000004c] pointer-events-none z-10">
-            <img
-              className="absolute top-[35px] sm:top-[40px] lg:top-[45px] left-[7px] sm:left-[8px] lg:left-[9px] w-5 sm:w-6 lg:w-7 h-[30px] sm:h-[35px] lg:h-[43px]"
-              alt="Rectangle"
-              src="https://c.animaapp.com/K3FjWwF5/img/rectangle-34625610.svg"
-            />
-
-            <img
-              className="absolute top-[35px] sm:top-[40px] lg:top-[45px] left-[25px] sm:left-[28px] lg:left-[33px] w-5 sm:w-6 lg:w-7 h-[30px] sm:h-[35px] lg:h-[43px]"
-              alt="Rectangle"
-              src="https://c.animaapp.com/K3FjWwF5/img/rectangle-34625611.svg"
-            />
-
-            <img
-              className="absolute top-0 left-0 w-[55px] sm:w-[65px] lg:w-[71px] h-[55px] sm:h-[65px] lg:h-[71px]"
-              alt="Star"
-              src="https://c.animaapp.com/K3FjWwF5/img/star-21.svg"
-            />
-
-            <div className="absolute top-[10px] sm:top-[12px] lg:top-[13px] left-[10px] sm:left-[12px] lg:left-[13px] w-[35px] sm:w-[40px] lg:w-[45px] h-[35px] sm:h-[40px] lg:h-[45px] bg-[#f0b04a] rounded-[17.5px] sm:rounded-[20px] lg:rounded-[22.5px]" />
-
-            <div className="absolute top-[15px] sm:top-[17px] lg:top-[18px] left-[20px] sm:left-[23px] lg:left-[26px] [font-family:'Pretendard-SemiBold',Helvetica] font-semibold text-white text-[24px] sm:text-[30px] lg:text-[35px] tracking-[-1.05px] leading-[35px] whitespace-nowrap">
-              1
-            </div>
-          </div>
         </div>
       </div>
 
       {/* 비디오 모달 */}
       {isVideoModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm">
-          <div className="relative w-full max-w-[930px] max-h-[520px] mx-4 aspect-video">
+          <div className="relative w-full max-w-4xl mx-4 aspect-video">
             {/* 닫기 버튼 */}
             <button
               onClick={closeVideoModal}

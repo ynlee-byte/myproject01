@@ -233,3 +233,31 @@
     transform: translateY(calc(-100% - var(--gap)));
   }
 }
+
+/* Play button hover pulse animation */
+@keyframes pulse-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Hovering the group (button) triggers pulse on the inner circle */
+.group:hover .pulse-target {
+  animation: pulse-pop 0.8s ease-in-out infinite;
+}
+
+/* Enable card straightening only on devices that support hover (mouse/trackpad) */
+@media (hover: hover) and (pointer: fine) {
+  .hover-scope:hover .hover-reset {
+    --card-rotate: 0deg;
+  }
+  .hover-reset:hover {
+    --card-rotate: 0deg;
+  }
+}

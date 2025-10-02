@@ -22,7 +22,7 @@ export const Card = ({
 }: Props): JSX.Element => {
   return (
     <div
-      className={`inline-flex flex-col items-center gap-6 sm:gap-8 lg:gap-[35px] p-4 sm:p-5 lg:p-[25px] relative bg-[#3b4236] rounded-[20px] border border-solid border-cpbg-black w-full max-w-[500px] mx-auto ${className}`}
+      className={`inline-flex flex-col items-center gap-6 sm:gap-8 lg:gap-[35px] p-4 sm:p-5 lg:p-[25px] relative bg-[#3b4236] rounded-[20px] border border-solid border-cpbg-black w-full min-w-[260px] max-w-[500px] mx-auto ${className}`}
     >
       <div className="flex flex-col items-center gap-4 sm:gap-5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="flex flex-col items-start gap-3 sm:gap-4 lg:gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
@@ -51,7 +51,7 @@ export const Card = ({
               - 최근 미니보험은 생활 밀착형 콘셉트로 2030 세대의 눈길을 사로잡고 있다.
             </p>
 
-            <div className="relative flex items-center justify-start self-stretch font-CP-btn-text font-[number:var(--CP-btn-text-font-weight)] text-body-text-color text-[12px] sm:text-[length:var(--CP-btn-text-font-size)] tracking-[var(--CP-btn-text-letter-spacing)] leading-[var(--CP-btn-text-line-height)] text-left [font-style:var(--CP-btn-text-font-style)]">
+            <div className="relative flex items-center justify-start self-stretch font-CP-btn-text font-[number:var(--CP-btn-text-font-weight)] text-body-text-color text-[12px] sm:text-[length:var(--CP-btn-text-font-size)] tracking-[var(--CP-btn-text-letter-spacing)] leading-[var(--CP-btn-text-line-height)] [font-style:var(--CP-btn-text-font-style)]">
               2025. 09. 09(화) 19:18
             </div>
           </div>
@@ -63,7 +63,7 @@ export const Card = ({
           src={vector}
         />
 
-        <div className="self-stretch w-full flex-[0_0_auto] bg-cpbg-black rounded-[20px] flex items-center justify-center relative">
+        <div className="self-stretch w-full flex-[0_0_auto] bg-transparent flex items-center justify-center relative">
           <div className="flex flex-col items-center justify-center gap-1 sm:gap-[5px] p-2 sm:p-3 lg:p-[15px] relative flex-1 bg-[#3b4236]">
             <img
               className="relative w-[20px] sm:w-[25px] lg:w-[30px] h-[20px] sm:h-[25px] lg:h-[30px] aspect-[1] object-cover"

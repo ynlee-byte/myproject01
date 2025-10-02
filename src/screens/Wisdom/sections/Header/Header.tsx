@@ -38,12 +38,12 @@ export const Header = (): JSX.Element => {
 
           {/* Mobile/Desktop Hamburger Menu */}
           <button
-            className="flex items-center justify-center"
+            className="flex items-center justify-center bg-transparent p-0 m-0 border-0 outline-none ring-0 focus:outline-none focus:ring-0 active:outline-none appearance-none transition-transform duration-200 active:scale-90"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="메뉴 열기"
           >
             <img
-              className="h-5 w-auto"
+              className={`h-5 w-auto bg-transparent transform transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 scale-110' : 'rotate-0'}`}
               alt="Menu"
               src="https://c.animaapp.com/K3FjWwF5/img/menu-icon.png"
             />
@@ -51,8 +51,8 @@ export const Header = (): JSX.Element => {
         </div>
 
         {/* Mobile Menu Dropdown */}
-        <div className={`md:hidden absolute top-full left-0 w-full bg-[#1D1F1A] border-b border-[#444] transition-all duration-300 ${
-          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        <div className={`md:hidden absolute top-[90px] left-0 w-full bg-[#1D1F1A] border-b border-[#444] transition-all duration-300 transform origin-top ${
+          isMobileMenuOpen ? 'opacity-100 visible translate-y-0 scale-y-100' : 'opacity-0 invisible -translate-y-2 scale-y-95'
         }`}>
           <div className="px-4 py-4 space-y-4">
             <a href="#" className="block text-white hover:text-[#adff00] transition-colors font-medium text-[16px] uppercase tracking-wide py-2 font-['Chakra_Petch']">
